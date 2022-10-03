@@ -11,7 +11,7 @@
           Upload Image
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
-        <button class="btn btn-outline-danger mx-2">
+        <button v-if="entry.id" class="btn btn-outline-danger mx-2" @click="onDeleteEntry">
           Delete
           <i class="fas fa-trash-alt"></i>
         </button>
@@ -24,12 +24,12 @@
         src="https://w0.peakpx.com/wallpaper/807/34/HD-wallpaper-kingdom-hearts-358-2-358-2-358-2-days-axel-clocktower-icecream-kingdom-hearts-roxas-sea-salt-twilight-town-xion.jpg"
         alt="kh" class="img-thumbnail">
   </template>
-  <FabButton :icon="'fas fa-save'"/>
+  <FabButton icon="fa-save" @on:click="saveEntry"/>
 </template>
 
 <script>
 import {defineAsyncComponent} from "vue";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import getFullDate from "@/modules/daybook/helpers/getFullDate";
 
 export default {
@@ -42,6 +42,11 @@ export default {
   },
   components: {
     FabButton: defineAsyncComponent(() => import(/* webpackChunkName: "SaveButton" */ "../components/FabButton.vue"))
+  },
+  data() {
+    return {
+      entry: null
+    }
   },
   computed: {
     ...mapGetters('journal', ['getEntryById']),
@@ -62,16 +67,34 @@ export default {
       return weekday;
     },
   },
-  data() {
-    return {
-      entry: null
-    }
-  },
   methods: {
+    ...mapActions('journal', ['updateEntry', 'createEntry', "deleteEntry"]),
     loadEntry() {
-      const entry = this.getEntryById(this.id);
-      if (!entry) return this.$router.push({name: 'db-no-entry'});
+      let entry;
+      if (this.id === 'new') {
+        entry = {
+          text: '',
+          date: new Date().getTime()
+        }
+      } else {
+        entry = this.getEntryById(this.id);
+        if (!entry) {
+          this.$router.push({name: 'db-no-entry'});
+        }
+      }
       this.entry = entry;
+    },
+    async saveEntry() {
+      if (this.entry.id) {
+        await this.updateEntry(this.entry);
+      } else {
+        const id = await this.createEntry(this.entry)
+        this.$router.push({name: 'db-entry', params: {id}});
+      }
+    },
+    async onDeleteEntry() {
+      await this.deleteEntry(this.entry.id);
+      this.$router.push({name: 'db-no-entry'});
     }
   },
   created() {

@@ -5,7 +5,7 @@
     </h1>
   </div>
 
-  <SaveButton/>
+  <SaveButton @on:click="createEntry"/>
 </template>
 
 <script>
@@ -15,6 +15,11 @@ export default {
   name: "NoEntrySelected",
   components: {
     SaveButton: defineAsyncComponent(() => import(/* webpackChunkName: "SaveButton" */ "../components/FabButton.vue"))
+  },
+  methods: {
+    createEntry() {
+      this.$router.push({name: "db-entry", params: {id: "new"}});
+    }
   }
 }
 </script>

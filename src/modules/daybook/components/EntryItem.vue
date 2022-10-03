@@ -1,28 +1,62 @@
 <template>
-  <div class="entry-container mb-3 pointer p-2" @click="goEntryView">
+  <div class="entry-container mb-3 pointer p-2" @click="goToEntry">
     <div class="entry-title d-flex">
-      <span class="text-success fs-5 fw-bold">15</span>
-      <span class="mx-1 fs-5">Julio</span>
-      <span class="mx-2 fw-light">2021, jueves</span>
+      <span class="text-success fs-5 fw-bold">{{getDay}}</span>
+      <span class="mx-1 fs-5">{{getMonth}}</span>
+      <span class="mx-2 fw-light">{{getYear}}, {{getDayOfWeek}}</span>
     </div>
 
     <div class="entry-description">
       <p class="text-muted">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, adipisci, alias, amet animi atque autem
-        consectetur consequuntur cumque cupiditate delectus deserunt dignissimos doloremque dolorum eius enim eos esse
-        excepturi expedita explicabo facilis fuga fugiat hic id illum impedit in incidunt inventore ipsa ipsum iste iure
-        iusto laboriosam laborum laudantium libero magnam magni maxime minima minus molestiae molestias mollitia nam
+        {{ shortText }}
       </p>
     </div>
   </div>
 </template>
 
 <script>
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
 export default {
   name: "EntryItem",
+  props: {
+    entry: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    shortText() {
+      return (this.entry.text.length > 130)
+          ? this.entry.text.substr(0, 130) + '...'
+          : this.entry.text;
+    },
+    getDay() {
+      const date = new Date(this.entry.date);
+      return date.getDate();
+    },
+    getMonth() {
+      const date = new Date(this.entry.date);
+      return months[date.getMonth()];
+    },
+    getYear() {
+      const date = new Date(this.entry.date);
+      return date.getFullYear();
+    },
+    getDayOfWeek() {
+      const date = new Date(this.entry.date);
+      return days[date.getDay() - 1];
+    }
+  },
   methods: {
-    goEntryView() {
-      this.$router.push({ name: "db-entry", params: { id: "1" } });
+    goToEntry() {
+      this.$router.push({
+        name: 'db-entry',
+        params: {
+          id: this.entry.id
+        }
+      });
     }
   }
 }

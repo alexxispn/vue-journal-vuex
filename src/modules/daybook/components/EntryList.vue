@@ -1,16 +1,16 @@
 <template>
   <div class="entry-list-container">
     <div class="px-2 pt-2">
-      <input type="text" class="form-control" placeholder="Search..." v-model="term" />
-    </div>
-    <div class="mt-2 d-flex flex-column">
-      <button class="btn btn-primary mx-3" @click="createEntry">
-        <i class="fa fa-plus circle"></i>
-        New Entry
-      </button>
+      <input type="text" class="form-control" placeholder="Search..." v-model="term"/>
     </div>
     <div class="entry-scrollarea">
-      <EntryItem v-for="entry in entriesByTerm" :key="entry.id" :entry="entry" />
+      <div class="mt-2 d-flex flex-column">
+        <button class="btn btn-primary mx-3" @click="createEntry">
+          <i class="fa fa-plus circle"></i>
+          New Entry
+        </button>
+      </div>
+      <EntryItem v-for="entry in entriesByTerm" :key="entry.id" :entry="entry"/>
     </div>
   </div>
 </template>

@@ -7,7 +7,8 @@
         <span class="mx-2 fw-light">{{ year }}, {{ weekday }}</span>
       </div>
       <div>
-        <button class="btn btn-primary">
+        <input v-show="false" type="file" @change="onSelectedImage" ref="fileInput" accept="image/*"/>
+        <button class="btn btn-primary" @click="onUploadImage">
           Upload Image
           <i class="fas fa-cloud-upload-alt"></i>
         </button>
@@ -20,9 +21,8 @@
     <div class="d-flex flex-column px-3 h-75">
       <textarea v-model="entry.text" placeholder="What happened today?"></textarea>
     </div>
-    <img
-        src="https://w0.peakpx.com/wallpaper/807/34/HD-wallpaper-kingdom-hearts-358-2-358-2-358-2-days-axel-clocktower-icecream-kingdom-hearts-roxas-sea-salt-twilight-town-xion.jpg"
-        alt="kh" class="img-thumbnail">
+    <img v-if="entry.picture && !localImage" :src="entry.picture" class="img-thumbnail" alt="entry picture"/>
+    <img v-if="localImage" :src="localImage" alt="entry picture" class="img-thumbnail">
   </template>
   <FabButton icon="fa-save" @on:click="saveEntry"/>
 </template>
@@ -30,7 +30,10 @@
 <script>
 import {defineAsyncComponent} from "vue";
 import {mapActions, mapGetters} from "vuex";
+import Swal from "sweetalert2";
 import getFullDate from "@/modules/daybook/helpers/getFullDate";
+import uploadImage from "@/modules/daybook/helpers/uploadImage";
+
 
 export default {
   name: "EntryView",
@@ -45,7 +48,9 @@ export default {
   },
   data() {
     return {
-      entry: null
+      entry: null,
+      localImage: null,
+      file: null
     }
   },
   computed: {
@@ -85,16 +90,51 @@ export default {
       this.entry = entry;
     },
     async saveEntry() {
+      Swal.showLoading();
+      this.entry.picture = await uploadImage(this.file);
       if (this.entry.id) {
         await this.updateEntry(this.entry);
       } else {
         const id = await this.createEntry(this.entry)
         this.$router.push({name: 'db-entry', params: {id}});
       }
+      this.file = null;
+      await Swal.fire('Saved', 'Entry saved successfully', 'success');
     },
     async onDeleteEntry() {
-      await this.deleteEntry(this.entry.id);
-      this.$router.push({name: 'db-no-entry'});
+      const {isConfirmed} = await Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      });
+      if (isConfirmed) {
+        await this.deleteEntry(this.entry.id);
+        await Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+        );
+        this.$router.push({name: 'db-no-entry'});
+      }
+    },
+    onSelectedImage(event) {
+      const image = (event.target.files[0]);
+      if (!image) {
+        this.localImage = null;
+        this.file = null;
+        return;
+      }
+      this.file = image;
+      const fr = new FileReader();
+      fr.onload = () => this.localImage = fr.result;
+      fr.readAsDataURL(image);
+    },
+    onUploadImage() {
+      this.$refs.fileInput.click();
     }
   },
   created() {

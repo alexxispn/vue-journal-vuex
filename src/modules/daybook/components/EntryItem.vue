@@ -51,7 +51,7 @@ export default {
   methods: {
     goToEntry() {
       this.$router.push({
-        name: 'db-entry',
+        name: 'entry',
         params: {
           id: this.entry.id
         }

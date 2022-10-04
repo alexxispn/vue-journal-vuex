@@ -1,12 +1,11 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import dayBookRouter from '../modules/daybook/router/index.js'
 
 const routes = [
     {
         path: '/',
         name: 'home',
-        component: HomeView
+        component: () => import(/* webpackChunkName: "home" */ '../views/HomeView.vue')
     },
     {
         path: '/about',

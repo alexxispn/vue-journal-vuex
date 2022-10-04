@@ -19,7 +19,7 @@ export default {
   name: "DaybookNavbar",
   methods: {
     goHome() {
-      this.$router.push({ name: "db-no-entry" });
+      this.$router.push({ name: "no-entry" });
     }
   }
 }

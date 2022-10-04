@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     createEntry() {
-      this.$router.push({name: "db-entry", params: {id: "new"}});
+      this.$router.push({name: "entry", params: {id: "new"}});
     }
   }
 }

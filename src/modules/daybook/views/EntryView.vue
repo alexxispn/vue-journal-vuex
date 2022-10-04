@@ -84,7 +84,7 @@ export default {
       } else {
         entry = this.getEntryById(this.id);
         if (!entry) {
-          this.$router.push({name: 'db-no-entry'});
+          this.$router.push({name: 'no-entry'});
         }
       }
       this.entry = entry;
@@ -96,7 +96,7 @@ export default {
         await this.updateEntry(this.entry);
       } else {
         const id = await this.createEntry(this.entry)
-        this.$router.push({name: 'db-entry', params: {id}});
+        this.$router.push({name: 'entry', params: {id}});
       }
       this.file = null;
       await Swal.fire('Saved', 'Entry saved successfully', 'success');
@@ -118,7 +118,7 @@ export default {
             'Your file has been deleted.',
             'success'
         );
-        this.$router.push({name: 'db-no-entry'});
+        this.$router.push({name: 'no-entry'});
       }
     },
     onSelectedImage(event) {

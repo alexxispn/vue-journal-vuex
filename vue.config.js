@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: '/vue-journal-vuex/
+  publicPath: '/vue-journal-vuex',
 }

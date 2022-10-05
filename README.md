@@ -28,5 +28,4 @@ This is a web that I create based on Fernando Herrera's Vue Course:
 
 https://cursos.devtalles.com/courses/vue-js
 
-
 https://www.udemy.com/course/vuejs-fh/

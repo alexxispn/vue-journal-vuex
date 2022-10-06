@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue_journal_vuex"]=self["webpackChunkvue_journal_vuex"]||[]).push([[443],{7381:function(u,n,e){e.r(n),e.d(n,{default:function(){return v}});var a=e(6252);const r={class:"about"},t=(0,a._)("h1",null,"This is an about page",-1),s=[t];function c(u,n){return(0,a.wg)(),(0,a.iD)("div",r,s)}var o=e(3744);const i={},l=(0,o.Z)(i,[["render",c]]);var v=l}}]);
+//# sourceMappingURL=about.ab067846.js.map

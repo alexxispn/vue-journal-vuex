@@ -8,7 +8,8 @@ describe("getFullDate helper", () => {
             day: 4,
             month: "October",
             year: 2022,
-            weekday: "Tuesday"
+            weekday: "Tuesday",
+            fullDate: "Tuesday, October 4, 2022"
         })
     });
 });

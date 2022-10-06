@@ -74,7 +74,7 @@ describe("Journal Module", () => {
             expect(entries.length).toBe(2);
             expect(entries.find(entry => entry.id === updatedEntry.id).text).toBe(updatedEntry.text);
         });
-        it('should add an entry', () => {
+        it('should add an entry', async () => {
             const store = createVuexStore(journalState);
             const newEntry = {
                 id: "123",
@@ -94,8 +94,43 @@ describe("Journal Module", () => {
             const {entries, isLoading} = store.state.journal;
             expect(isLoading).toBeTruthy();
             expect(entries.length).toBe(2);
-            expect(entries.find(entry => entry.id === id)).toBeUndefined();
+            expect(entries.find(entry => entry.id === id)).toBe(undefined);
         });
     });
+    describe.skip("Actions", () => {
+        it('should load entries', async () => {
+            const store = createVuexStore({isLoading: false, entries: []});
+            await store.dispatch('journal/loadEntries');
+            const {entries, isLoading} = store.state.journal;
+            expect(isLoading).toBeFalsy();
+            expect(entries.length).toBe(2);
+        });
+        it('should update an entry', async () => {
+            const store = createVuexStore(journalState);
+            const updatedEntry = {
+                id: "-NDXopVqgqsXIVCoN88",
+                date: 1664811259736,
+                text: "hola mundo desde updateAction2"
+            };
+            await store.dispatch('journal/updateEntry', updatedEntry);
+            await store.dispatch('journal/loadEntries');
+            expect(store.state.journal.entries.length).toBe(2);
+            expect(store.state.journal.entries.find(entry => entry.id === updatedEntry.id).text).toBe(updatedEntry.text);
+        });
+        it('should add and delete an entry', async () => {
+            const store = createVuexStore(journalState);
+            const newEntry = {
+                date: 1664811259736,
+                text: "hola mundo desde addAction"
+            };
+            await store.dispatch('journal/addEntry', newEntry);
+            await store.dispatch('journal/loadEntries');
+            const id = store.state.journal.entries.find(entry => entry.text === newEntry.text).id;
+            expect(store.state.journal.entries.length).toBe(3);
+            expect(store.state.journal.entries.find(entry => entry.id === id)).toEqual({...newEntry, id});
+            await store.dispatch('journal/deleteEntry', id);
+            await store.dispatch('journal/loadEntries');
+            expect(store.state.journal.entries.length).toBe(2);
+        })
+    });
 });
-

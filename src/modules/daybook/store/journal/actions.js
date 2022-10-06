@@ -23,17 +23,16 @@ export const updateEntry = async ({commit}, entry) => {
     }
     delete newEntry.id;
     await journalApi.put(`/entries/${entry.id}.json`, newEntry);
-    commit("updateEntry", {...entry});
+    commit("updateEntry", newEntry);
     return entry.id;
 }
 
-export const createEntry = async ({commit}, entry) => {
-    const {date, picture, text} = entry;
-    const newEntry = {date, picture, text};
-    const {data} = await journalApi.post("/entries.json", newEntry);
-    commit("addEntry", {...newEntry, id: data.name});
+export const addEntry = async ({commit}, entry) => {
+    const {data} = await journalApi.post("/entries.json", entry);
+    commit("addEntry", {...entry, id: data.name});
     return data.name;
 }
+
 
 export const deleteEntry = async ({commit}, id) => {
     await journalApi.delete(`/entries/${id}.json`)

@@ -73,7 +73,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('journal', ['updateEntry', 'createEntry', "deleteEntry"]),
+    ...mapActions('journal', ['updateEntry', 'addEntry', "deleteEntry"]),
     loadEntry() {
       let entry;
       if (this.id === 'new') {
@@ -95,7 +95,7 @@ export default {
       if (this.entry.id) {
         await this.updateEntry(this.entry);
       } else {
-        const id = await this.createEntry(this.entry)
+        const id = await this.addEntry(this.entry)
         this.$router.push({name: 'entry', params: {id}});
       }
       this.file = null;

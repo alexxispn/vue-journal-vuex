@@ -5,7 +5,7 @@
     </div>
     <div class="entry-scrollarea">
       <div class="mt-2 d-flex flex-column">
-        <button class="btn btn-primary mx-3" @click="createEntry">
+        <button class="btn btn-primary mx-3" @click="toNewEntry">
           <i class="fa fa-plus circle"></i>
           New Entry
         </button>
@@ -31,7 +31,7 @@ export default {
     }
   },
   methods: {
-    createEntry() {
+    toNewEntry() {
       this.$router.push({name: 'entry', params: {id: 'new'}});
     }
   },

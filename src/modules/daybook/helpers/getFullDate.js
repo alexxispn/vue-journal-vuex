@@ -7,7 +7,8 @@ const getFullDate = (dateString) => {
         day: date.getDate(),
         month: months[date.getMonth()],
         year: date.getFullYear(),
-        weekday: days[date.getDay()]
+        weekday: days[date.getDay()],
+        fullDate: `${date.getDate()}/${months[date.getMonth()]}/${date.getFullYear()} ${days[date.getDay()]}`
     }
 }
 

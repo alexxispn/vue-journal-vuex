@@ -1,6 +1,9 @@
+import getFullDate from "@/modules/daybook/helpers/getFullDate";
+
 export const getEntriesByTerm = (state) => (term) => {
     return state.entries.filter((entry) => {
-        return entry.text.toLowerCase().includes(term.toLowerCase()) || entry.date.includes(term)
+        const {fullDate} = getFullDate(entry.date);
+        return entry.text.toLowerCase().includes(term.toLowerCase()) || fullDate.toLowerCase().includes(term.toLowerCase());
     })
 }
 
